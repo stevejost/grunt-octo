@@ -8,7 +8,7 @@ var DESCRIPTION = 'A Grunt wrapper for octopack library to package projects.';
 module.exports = function(grunt) {
     grunt.registerMultiTask(TASK_NAME, DESCRIPTION, function() {
         var done = this.async(),
-            files = grunt.file.expand(this.filesSrc),
+            files = this.files,
             options = this.options({
                 dst: './'
             });
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
             try {
                 var pkg = octo.pack(options.type, {id: options.id, version: options.version});
                 files.forEach(function(f) {
-                    pkg.append(f);
+                    pkg.append(f.dest, f.src[0]);
                 });
                 pkg.toFile(options.dst, function (err, data) {
                     if(err) {
